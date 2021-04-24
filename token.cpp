@@ -1,5 +1,5 @@
 #include "token.h"
-#include "tokenStrings.h"
+#include "tokenstrings.h"
 
     //return the token type
     tokenType Token::getType()
@@ -16,13 +16,13 @@
     //print the token type and text
     void Token::printToken()
     {
-        if(this->type -> 258)
+        if(this->type < 258)
         {
-        cout <<this->type<<'\t'<<this->text<< endl;
+        cout <<(char)this->type<<'\t'<<this->text<< endl;
         }
         else
         {
-        cout <tokenStrings[this->getType()-258])<<'\t'<<this->text<< endl;
+        cout << tokenStrings[this->getType()-258]<<'\t'<<this->text<< endl;
         }
     }
 
