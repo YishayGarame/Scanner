@@ -42,7 +42,7 @@
             // using begin() to print set
                 for (auto it = lines->begin(); it != lines->end(); ++it)
                 {
-                    cout << *it <<' ';
+                    cout << *it << " ";
                 }
                 cout << endl;
             }
