@@ -123,6 +123,66 @@ if( (ch >= 'a' && ch <='z') || (ch >= 'A' && ch <= 'Z') || ch == '_')
 
 //Case Numbers:
 
+// example: .7849673 || 33.545E || 1.556e ...
+if((ch >= '1' && ch <= '9') || ch == '.')
+{
+    nextChar();
+    string myNum = string(1,ch);
+    
+    //define number regex
+    regex numReg("[+-]?([0-9]*[.])?[0-9]+");
+
+    while(nextChar())
+    {
+        // check if myvar + the new ch match to the valid regex path 
+        if(regex_match(myNum + ch, numReg))
+        {
+            myNum += ch;
+        }
+        else
+        {
+            shared_ptr<Token> token;
+
+            //check if symtab has the new var
+            token = symTab.lookupToken(myNum);
+            
+            if(token == nullptr)
+            {
+                token = make_shared<varToken>(myVar);
+                symTab.insertToken(myVar, token);
+            }
+            //in case that we got regulat Token the addline function will do nothing
+            token->add_line(lineno);
+            inputFile.unget();
+            return token;
+        }
+    }
+
+}
+
+//case: 'e' || 'y' .....
+
+if(ch == '\'')
+{
+    string myChar = string(1,ch);
+    regex charReg("\'[^\']\'"); 
+    
+    while(nextChar())
+    {
+        myChar =+ ch;
+        if(ch ='\'')
+        {
+            break;
+        }
+    }
+    shared_ptr<Token> token;
+    
+    //if mychar match to the regex
+    if(regex_match(myChar,charReg))
+    {
+        token = make_shared<Token>
+    }
+}
 
 
 
