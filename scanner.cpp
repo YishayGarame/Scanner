@@ -148,8 +148,8 @@ if((ch >= '1' && ch <= '9') || ch == '.')
             
             if(token == nullptr)
             {
-                token = make_shared<varToken>(myVar);
-                symTab.insertToken(myVar, token);
+                token = make_shared<varToken>(myNum);
+                symTab.insertToken(myNum, token);
             }
             //in case that we got regulat Token the addline function will do nothing
             token->add_line(lineno);
@@ -167,21 +167,31 @@ if(ch == '\'')
     string myChar = string(1,ch);
     regex charReg("\'[^\']\'"); 
     
-    while(nextChar())
-    {
-        myChar =+ ch;
-        if(ch ='\'')
-        {
-            break;
-        }
-    }
-    shared_ptr<Token> token;
+
+    // while loop until we get ' 
+  while(nextChar())
+  {
+      myChar += ch;
+      
+      //we check if we got the second ' and than we'll check mycahr
+      if(ch = '\'')
+      {
+          break;
+      }
+  }
     
-    //if mychar match to the regex
+    shared_ptr<Token> token;
+
+    //if mychar match to the regex will return constant as required 
     if(regex_match(myChar,charReg))
     {
-        token = make_shared<Token>
+        token = make_shared<Token>(CONSTANT,myChar.substr(1,1));
     }
+    else
+    {
+        token = make_shared<Token>(ERROR,myChar.substr(1,1)) ;
+    }
+    return token;
 }
 
 
