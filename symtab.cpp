@@ -30,6 +30,8 @@
     {
         symMap[text] =tokenp;
     }
+
+    
 	void SymbolTable::xref()
     {
 
@@ -38,7 +40,7 @@
             if(x.second->getType() == IDENTIFIER)
             {
                 shared_ptr<set<int>> lines = x.second->getLines();
-                cout << x.first <<'\t';
+                cout << x.first <<"\t";
             // using begin() to print set
                 for (auto it = lines->begin(); it != lines->end(); ++it)
                 {

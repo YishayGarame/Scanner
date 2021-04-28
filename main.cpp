@@ -12,17 +12,17 @@ int main(int argc, char* argv[]) {
 	}
 
 	//
-	varToken vt("x");
-	vt.printToken();
-	vt.add_line(3);
-	vt.add_line(4);
-	vt.add_line(32);
+	// varToken vt("x");
+	// vt.printToken();
+	// vt.add_line(3);
+	// vt.add_line(4);
+	// vt.add_line(32);
 
-	SymbolTable s;
-	cout << "aa: " << (s.lookupToken("x") == nullptr) << endl;
-	s.insertToken("x", make_shared<varToken>(vt));
-	cout << "aa: " << (s.lookupToken("x") == nullptr) << endl;
-	s.xref();
+	// SymbolTable s;
+	// cout << "aa: " << (s.lookupToken("x") == nullptr) << endl;
+	// s.insertToken("x", make_shared<varToken>(vt));
+	// cout << "aa: " << (s.lookupToken("x") == nullptr) << endl;
+	// s.xref();
 	//
 
 	SymbolTable symTab;			// create symbol table

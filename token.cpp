@@ -18,7 +18,7 @@
     {
         if(this->type < 258)
         {
-        cout <<(char)this->type<<'\t'<<this->text<< endl;
+        cout <<(char)this->type<<"\t"<<this->text<< endl;
         }
         else
         {
@@ -29,7 +29,7 @@
     //add a line the tokens lines
     void varToken::add_line(int l)
      {
-         this->lines.get()->insert(l);
+         this->lines->insert(l);
      }
     
     //return shared_ptr lines

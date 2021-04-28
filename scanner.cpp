@@ -3,8 +3,7 @@
 
 shared_ptr<Token> Scanner::nextToken()
 {
-    //read the first char of the file
-    nextChar();
+   
 
     /*
     comment() /* adapt the following code 
@@ -18,6 +17,8 @@ shared_ptr<Token> Scanner::nextToken()
         }
     }
     */
+     //read the first char of the file
+    nextChar();
 
     while((ch == ' ') || (ch == '\t') || (ch == '\n') || ch == ('/'))
     {
@@ -26,9 +27,10 @@ shared_ptr<Token> Scanner::nextToken()
         {
             nextChar();
 
+            //case /*:
             if(ch == '*')
             {
-                char prev =0;
+                char prev = 0;
 
                 while(nextChar())
                 {
@@ -43,7 +45,7 @@ shared_ptr<Token> Scanner::nextToken()
 
             if(ch == '/')
             {
-                int currentLine =lineno;
+                int currentLine = lineno;
                 while(nextChar())
                 {
                     if(currentLine != lineno) 
@@ -59,54 +61,7 @@ shared_ptr<Token> Scanner::nextToken()
 
 
 
- // Case: ' ' (Space)
-    if(ch == ' ' || ch == '\n') //rrl
-    {
-        while(nextChar())
-        {
-            if(ch != ' ' || ch != '\n')
-            {
-                inputFile.unget();
-                break;
-            }
-        }
-    }
 
-
-    // Case: // || /**/
-    if(ch == '/')
-    {
-        int currentLine = lineno;
-        nextChar();
-        if(ch == '/')  //  "//"
-        {
-            while(nextChar())
-            {
-                if(currentLine != lineno) 
-                {
-                    inputFile.unget();
-                    break;
-                }
-            }
-        }
-
-        //case /**/
-        if(ch == '*')
-        {
-            while(nextChar())
-            {
-                if(ch == '*' )
-                {
-                    nextChar(); // in case * is  solid
-                    if(ch == '/') // */
-                    {
-                     break;
-                    }
-                }
-            }
-        }
-  
-    }
 
     //case:
 
