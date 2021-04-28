@@ -122,7 +122,7 @@ shared_ptr<Token> Scanner::nextToken()
     // each character represents itself
         case ';' : case '{' : case '}' : case ',' : case ':' : \
         case '(' : case ')' : case '[' : case ']' : case '~' : \
-        case '*' : case '%' : case '^' : case '?' : case '/': case '=':
+        case '*' : case '%' : case '^' : case '?' : case '/': case '=': case '&':
         return shared_ptr<Token>
         (new Token(static_cast<tokenType>(ch),string(1,ch)));
         break;  
@@ -182,21 +182,27 @@ shared_ptr<Token> Scanner::nextToken()
         //cout<<"number is "<<ch<<endl;
 
         //define number regex
-        regex numReg("[+-]?([0-9]*[.])?[0-9]+");
-
+        regex numReg("[+-]?([0-9]*[.])?[0-9]+(E|e)?[0-9]*");
+    //([0-9]+(\\.)?[0-9](E|e)?[0-9])"))) 
         while(nextChar())
         {
+            if((ch == '.') || (ch == 'E') || (ch == 'e'))
+            {
+                myNum += ch;
+                nextChar();
+            }
             // check if myvar + the new ch match to the valid regex path 
             if(regex_match(myNum + ch, numReg))
             {
                 myNum += ch;
+               // cout<<"good------------"<< myNum <<"a"<<endl;
             }
             else
             {
+                //cout<<"checking---------"<< myNum <<"a"<<endl;
                 break;
             }
         }
-            
         inputFile.unget();
         if(myNum == ".")
         {
@@ -270,16 +276,14 @@ shared_ptr<Token> Scanner::nextToken()
         while(nextChar())
         {
             myChar += ch;
-                    cout<<"mychar :" <<myChar<<endl;
 
             //we check if we got the second ' and than we'll check mycahr
-            if(ch = '"')
+            if(ch == '"')
             {
-                cout<<" prob"<< ch <<endl;
                 break;
             }
+
         }
-        cout<<"mystring :" <<myChar<<endl;
             
             shared_ptr<Token> token;
             int mycharlength = myChar.length();
@@ -290,7 +294,6 @@ shared_ptr<Token> Scanner::nextToken()
             }
             else
             {
-                cout << "error ?" <<endl;
                 token = make_shared<Token>(ERROR,myChar.substr(1,mycharlength-2)) ;
             }
             return token;
