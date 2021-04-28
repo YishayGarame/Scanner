@@ -3,7 +3,7 @@
 
 shared_ptr<Token> Scanner::nextToken()
 {
-   
+   int bleckspace= 0 ;
 
     /*
     comment() /* adapt the following code 
@@ -20,8 +20,12 @@ shared_ptr<Token> Scanner::nextToken()
      //read the first char of the file
     nextChar();
 
-    while((ch == ' ') || (ch == '\t') || (ch == '\n') || ch == ('/'))
+    while((ch == ' ') || (ch == '\t') || (ch == '\n') || ch == ('/') || (ch == 13))
     {
+        // if(ch == ' ')
+        // {
+        //     cout<<"space:"<<endl;
+        // }
         // case ' / ' :
         if(ch == '/')
         {
@@ -56,6 +60,21 @@ shared_ptr<Token> Scanner::nextToken()
                 }
             }
         }
+        if((ch == ' ') || (ch == '\t') || (ch == '\n') || ch == ('/') || (ch == 13))
+        {
+            bleckspace++;
+        }
+        if(bleckspace>100000)
+        {
+            break;
+        }
+         nextChar();
+        // if(ch == 13)
+        // {
+        //     break;
+        // }
+        // cout<<"ch : "<<(int)ch<<endl;
+
     }
 
 
@@ -103,7 +122,7 @@ shared_ptr<Token> Scanner::nextToken()
     // each character represents itself
         case ';' : case '{' : case '}' : case ',' : case ':' : \
         case '(' : case ')' : case '[' : case ']' : case '~' : \
-        case '*' : case '%' : case '^' : case '?' : case '/':
+        case '*' : case '%' : case '^' : case '?' : case '/': case '=':
         return shared_ptr<Token>
         (new Token(static_cast<tokenType>(ch),string(1,ch)));
         break;  
@@ -156,11 +175,12 @@ shared_ptr<Token> Scanner::nextToken()
     //Case Numbers:
 
     // example: .7849673 || 33.545E || 1.556e ...
-    if((ch >= '1' && ch <= '9') || ch == '.')
+    if((ch >= '0' && ch <= '9') || ch == '.' || (ch =='-') || (ch == '+'))
     {
-        nextChar();
         string myNum = string(1,ch);
-        
+        //nextChar();
+        //cout<<"number is "<<ch<<endl;
+
         //define number regex
         regex numReg("[+-]?([0-9]*[.])?[0-9]+");
 
@@ -173,25 +193,29 @@ shared_ptr<Token> Scanner::nextToken()
             }
             else
             {
-                shared_ptr<Token> token;
-
-                //check if symtab has the new var
-                token = symTab.lookupToken(myNum);
-                
-                if(token == nullptr)
-                {
-                    token = make_shared<varToken>(myNum);
-                    symTab.insertToken(myNum, token);
-                }
-                //in case that we got regulat Token the addline function will do nothing
-                token->add_line(lineno);
-                inputFile.unget();
-                return token;
+                break;
             }
         }
+            
+        inputFile.unget();
+        if(myNum == ".")
+        {
+            return shared_ptr<Token>()=make_shared<Token>(static_cast<tokenType>('.'),myNum);
+        }
 
+        shared_ptr<Token> token;
+
+        if(regex_match(myNum, numReg))
+        {
+            token = make_shared<Token>(CONSTANT,myNum);
+        }
+        else
+        {
+            token = make_shared<Token>(ERROR,myNum);
+        }
+        return token;
+            
     }
-
 
 
 
@@ -206,7 +230,10 @@ shared_ptr<Token> Scanner::nextToken()
         // while loop until we get ' 
     while(nextChar())
     {
+        //cout<<"my char "<<myChar<<endl;
         myChar += ch;
+        //cout<<"my char after "<<myChar<<endl;
+
         
         //we check if we got the second ' and than we'll check mycahr
         if(ch = '\'')
@@ -214,9 +241,11 @@ shared_ptr<Token> Scanner::nextToken()
             break;
         }
     }
-        
-        shared_ptr<Token> token;
+        //cout<<"my char after after "<<myChar<<endl;
 
+        shared_ptr<Token> token;
+        nextChar();
+        myChar += ch;
         //if mychar match to the regex will return constant as required 
         if(regex_match(myChar,charReg))
         {
@@ -237,30 +266,34 @@ shared_ptr<Token> Scanner::nextToken()
         string myChar = string(1,ch);
         
 
-        // while loop until we get ' 
-    while(nextChar())
-    {
-        myChar += ch;
-        
-        //we check if we got the second ' and than we'll check mycahr
-        if(ch = '"')
+            // while loop until we get ' 
+        while(nextChar())
         {
-            break;
+            myChar += ch;
+                    cout<<"mychar :" <<myChar<<endl;
+
+            //we check if we got the second ' and than we'll check mycahr
+            if(ch = '"')
+            {
+                cout<<" prob"<< ch <<endl;
+                break;
+            }
         }
-    }
-        
-        shared_ptr<Token> token;
-        int mycharlength = myChar.length();
-        //if mychar match to the regex will return constant as required 
-        if(regex_match(myChar,charReg))
-        {
-            token = make_shared<Token>(STRING_LITERAL,myChar.substr(1,mycharlength-2));
-        }
-        else
-        {
-            token = make_shared<Token>(ERROR,myChar.substr(1,mycharlength-2)) ;
-        }
-        return token;
+        cout<<"mystring :" <<myChar<<endl;
+            
+            shared_ptr<Token> token;
+            int mycharlength = myChar.length();
+            //if mychar match to the regex will return constant as required 
+            if(regex_match(myChar,charReg))
+            {
+                token = make_shared<Token>(STRING_LITERAL,myChar.substr(1,mycharlength-2));
+            }
+            else
+            {
+                cout << "error ?" <<endl;
+                token = make_shared<Token>(ERROR,myChar.substr(1,mycharlength-2)) ;
+            }
+            return token;
     }
 
     return nullptr;
