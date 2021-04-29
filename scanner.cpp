@@ -22,10 +22,7 @@ shared_ptr<Token> Scanner::nextToken()
 
     while((ch == ' ') || (ch == '\t') || (ch == '\n') || ch == ('/') || (ch == 13))
     {
-        // if(ch == ' ')
-        // {
-        //     cout<<"space:"<<endl;
-        // }
+
         // case ' / ' :
         if(ch == '/')
         {
@@ -69,11 +66,7 @@ shared_ptr<Token> Scanner::nextToken()
             break;
         }
          nextChar();
-        // if(ch == 13)
-        // {
-        //     break;
-        // }
-        // cout<<"ch : "<<(int)ch<<endl;
+
 
     }
 
@@ -177,122 +170,44 @@ shared_ptr<Token> Scanner::nextToken()
     if((ch >= '0' && ch <= '9') || ch == '.' || (ch =='-') || (ch == '+'))
     {
         string myNum = string(1,ch);
-        //nextChar();
-        //cout<<"number is "<<ch<<endl;
 
         //define number regex
         regex numReg("[+-]?([0-9]*[.])?[0-9]*(E|e)?[0-9]*");
-    //([0-9]+(\\.)?[0-9](E|e)?[0-9])"))) 
-    // int i =1 ;
+
         while(nextChar())
         {
+            //put into muNum all chars until ' ' 
             while((ch >= '0' && ch <= '9')||(ch == '.') || (ch == 'e') || (ch == 'E'))
             {
                 myNum += ch;
-                //cout<<"first if---------"<< myNum <<"a"<<endl;
                 nextChar();
-               //cout << " the i is fir: "<< i << endl;
-              // cout<<"the nuber is : " << myNum <<endl;
+
             }
             break;
             
-            // // check if myvar + the new ch match to the valid regex path 
-            // if(regex_match(myNum + ch, numReg))
-            // {
-            //     cout << " the i is sec: "<< i << endl;
-            //     myNum += ch;
-            //    // cout<<"good------------"<< myNum <<"a"<<endl;
-            // }
-            // else
-            // {
-            //     //cout<<"checking---------"<< myNum <<"a"<<endl;
-            //     break;
-            // }
-            // i++;
         }
         inputFile.unget();
+        
+        //check case that num is only '.'
         if(myNum == ".")
         {
-           // cout << "-----------------------------"<<endl;
             return shared_ptr<Token>()=make_shared<Token>(static_cast<tokenType>('.'),myNum);
         }
 
         shared_ptr<Token> token;
 
+        //check that myNum match to the regex path
         if(regex_match(myNum, numReg))
         {
             token = make_shared<Token>(CONSTANT,myNum);
         }
         else
         {
-            //continue fro, here the problem is the two dots
-            //cout<< "the error:--->>"<<myNum<<endl;
             token = make_shared<Token>(ERROR,myNum);
         }
         return token;
             
     }
-
-
-    // //Case Numbers:
-
-    // // example: .7849673 || 33.545E || 1.556e ...
-    // if((ch >= '0' && ch <= '9') || ch == '.' || (ch =='-') || (ch == '+'))
-    // {
-    //     string myNum = string(1,ch);
-    //     //nextChar();
-    //     //cout<<"number is "<<ch<<endl;
-
-    //     //define number regex
-    //     regex numReg("[+-]?([0-9]*[.])?[0-9]*(E|e)?[0-9]*");
-    // //([0-9]+(\\.)?[0-9](E|e)?[0-9])"))) 
-    // int i =1 ;
-    //     while(nextChar())
-    //     {
-    //         if((ch == '.') || (ch == 'e') || (ch == 'E')|| (ch >= '0' && ch <= '9'))
-    //         {
-    //             myNum += ch;
-    //             //cout<<"first if---------"<< myNum <<"a"<<endl;
-    //             nextChar();
-    //             cout << " the i is fir: "<< i << endl;
-    //         }
-            
-    //         // check if myvar + the new ch match to the valid regex path 
-    //         if(regex_match(myNum + ch, numReg))
-    //         {
-    //             cout << " the i is sec: "<< i << endl;
-    //             myNum += ch;
-    //            // cout<<"good------------"<< myNum <<"a"<<endl;
-    //         }
-    //         else
-    //         {
-    //             //cout<<"checking---------"<< myNum <<"a"<<endl;
-    //             break;
-    //         }
-    //         i++;
-    //     }
-    //     inputFile.unget();
-    //     // if(myNum == ".")
-    //     // {
-    //     //     cout << "-----------------------------"<<endl;
-    //     //     return shared_ptr<Token>()=make_shared<Token>(static_cast<tokenType>('.'),myNum);
-    //     // }
-
-    //     shared_ptr<Token> token;
-
-    //     if(regex_match(myNum, numReg))
-    //     {
-    //         token = make_shared<Token>(CONSTANT,myNum);
-    //     }
-    //     else
-    //     {
-    //         //continue fro, here the problem is the two dots
-    //         //cout<< "the error:--->>"<<myNum<<endl;
-    //         token = make_shared<Token>(ERROR,myNum);
-    //     }
-    //     return token;
-            
-    // }
 
 
 
@@ -307,9 +222,7 @@ shared_ptr<Token> Scanner::nextToken()
         // while loop until we get ' 
     while(nextChar())
     {
-        //cout<<"my char "<<myChar<<endl;
         myChar += ch;
-        //cout<<"my char after "<<myChar<<endl;
 
         
         //we check if we got the second ' and than we'll check mycahr
@@ -318,7 +231,6 @@ shared_ptr<Token> Scanner::nextToken()
             break;
         }
     }
-        //cout<<"my char after after "<<myChar<<endl;
 
         shared_ptr<Token> token;
         nextChar();
