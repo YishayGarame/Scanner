@@ -171,7 +171,6 @@ shared_ptr<Token> Scanner::nextToken()
 
     }
 
-
     //Case Numbers:
 
     // example: .7849673 || 33.545E || 1.556e ...
@@ -182,30 +181,39 @@ shared_ptr<Token> Scanner::nextToken()
         //cout<<"number is "<<ch<<endl;
 
         //define number regex
-        regex numReg("[+-]?([0-9]*[.])?[0-9]+(E|e)?[0-9]*");
+        regex numReg("[+-]?([0-9]*[.])?[0-9]*(E|e)?[0-9]*");
     //([0-9]+(\\.)?[0-9](E|e)?[0-9])"))) 
+    // int i =1 ;
         while(nextChar())
         {
-            if((ch == '.') || (ch == 'E') || (ch == 'e'))
+            while((ch >= '0' && ch <= '9')||(ch == '.') || (ch == 'e') || (ch == 'E'))
             {
                 myNum += ch;
+                //cout<<"first if---------"<< myNum <<"a"<<endl;
                 nextChar();
+               //cout << " the i is fir: "<< i << endl;
+              // cout<<"the nuber is : " << myNum <<endl;
             }
-            // check if myvar + the new ch match to the valid regex path 
-            if(regex_match(myNum + ch, numReg))
-            {
-                myNum += ch;
-               // cout<<"good------------"<< myNum <<"a"<<endl;
-            }
-            else
-            {
-                //cout<<"checking---------"<< myNum <<"a"<<endl;
-                break;
-            }
+            break;
+            
+            // // check if myvar + the new ch match to the valid regex path 
+            // if(regex_match(myNum + ch, numReg))
+            // {
+            //     cout << " the i is sec: "<< i << endl;
+            //     myNum += ch;
+            //    // cout<<"good------------"<< myNum <<"a"<<endl;
+            // }
+            // else
+            // {
+            //     //cout<<"checking---------"<< myNum <<"a"<<endl;
+            //     break;
+            // }
+            // i++;
         }
         inputFile.unget();
         if(myNum == ".")
         {
+           // cout << "-----------------------------"<<endl;
             return shared_ptr<Token>()=make_shared<Token>(static_cast<tokenType>('.'),myNum);
         }
 
@@ -217,11 +225,74 @@ shared_ptr<Token> Scanner::nextToken()
         }
         else
         {
+            //continue fro, here the problem is the two dots
+            //cout<< "the error:--->>"<<myNum<<endl;
             token = make_shared<Token>(ERROR,myNum);
         }
         return token;
             
     }
+
+
+    // //Case Numbers:
+
+    // // example: .7849673 || 33.545E || 1.556e ...
+    // if((ch >= '0' && ch <= '9') || ch == '.' || (ch =='-') || (ch == '+'))
+    // {
+    //     string myNum = string(1,ch);
+    //     //nextChar();
+    //     //cout<<"number is "<<ch<<endl;
+
+    //     //define number regex
+    //     regex numReg("[+-]?([0-9]*[.])?[0-9]*(E|e)?[0-9]*");
+    // //([0-9]+(\\.)?[0-9](E|e)?[0-9])"))) 
+    // int i =1 ;
+    //     while(nextChar())
+    //     {
+    //         if((ch == '.') || (ch == 'e') || (ch == 'E')|| (ch >= '0' && ch <= '9'))
+    //         {
+    //             myNum += ch;
+    //             //cout<<"first if---------"<< myNum <<"a"<<endl;
+    //             nextChar();
+    //             cout << " the i is fir: "<< i << endl;
+    //         }
+            
+    //         // check if myvar + the new ch match to the valid regex path 
+    //         if(regex_match(myNum + ch, numReg))
+    //         {
+    //             cout << " the i is sec: "<< i << endl;
+    //             myNum += ch;
+    //            // cout<<"good------------"<< myNum <<"a"<<endl;
+    //         }
+    //         else
+    //         {
+    //             //cout<<"checking---------"<< myNum <<"a"<<endl;
+    //             break;
+    //         }
+    //         i++;
+    //     }
+    //     inputFile.unget();
+    //     // if(myNum == ".")
+    //     // {
+    //     //     cout << "-----------------------------"<<endl;
+    //     //     return shared_ptr<Token>()=make_shared<Token>(static_cast<tokenType>('.'),myNum);
+    //     // }
+
+    //     shared_ptr<Token> token;
+
+    //     if(regex_match(myNum, numReg))
+    //     {
+    //         token = make_shared<Token>(CONSTANT,myNum);
+    //     }
+    //     else
+    //     {
+    //         //continue fro, here the problem is the two dots
+    //         //cout<< "the error:--->>"<<myNum<<endl;
+    //         token = make_shared<Token>(ERROR,myNum);
+    //     }
+    //     return token;
+            
+    // }
 
 
 
